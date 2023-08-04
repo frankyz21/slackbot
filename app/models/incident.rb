@@ -24,20 +24,15 @@ class Incident < ApplicationRecord
   end
 
   def self.create_slack_channel(incident)
-    # Define the name of the channel based on the incident title
-    # You can customize this as needed
     channel_name = "incident-#{incident.title.downcase.gsub(/\s+/, '-')}"
-    # Create the Slack channel
     channel = nil
     begin
       response = CLIENT.conversations_create(name: channel_name)
       channel = response['channel']
     rescue Slack::Web::Api::Errors::SlackError => e
-      # Handle any errors that occur during channel creation
       puts "Error creating Slack channel: #{e.message}"
       return nil
     end
-    # Return the created channel object
     channel
   end
   
