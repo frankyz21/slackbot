@@ -1,5 +1,6 @@
 class SlackResponder
   def initialize(params)    
+    @params = params
     @channel_id = params["channel_id"]
     @client = CLIENT
     @trigger_id = params["trigger_id"]
