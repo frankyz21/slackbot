@@ -8,12 +8,17 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_tag 'controllers', 'data-turbolinks-track': 'reload' %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+    <div class="h-screen flex overflow-hidden bg-gray-50">
+      <div class="md:px-6 md:pt-3 flex flex-col w-0 flex-1 overflow-auto space-y-4 pb-10">
+        <%= render "layouts/shared/header" %>
+        <%= yield %>
+      </div>
+    </div>
+    <%= turbo_frame_tag "modal" %>
   </body>
 </html>

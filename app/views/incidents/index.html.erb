@@ -1,4 +1,76 @@
-<div>
-  <h1 class="font-bold text-4xl">Incidents#index</h1>
-  <p>Find me in app/views/incidents/index.html.erb</p>
+<% content_for :title do %>
+  Slack Incidents
+<% end %>
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="p-4">
+          <div class="flex items-center">
+            <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="checkbox-all-search" class="sr-only">checkbox</label>
+          </div>
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Title
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Description
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Severity
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Creator
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Time to Resolve
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Channel ID
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Status
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @incidents.each do |incident| %>
+      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <td class="w-4 p-4">
+          <div class="flex items-center">
+            <input id="checkbox-table-search-<%= incident.id %>" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="checkbox-table-search-<%= incident.id %>" class="sr-only">checkbox</label>
+          </div>
+        </td>
+        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+          <%= incident.title %>
+        </td>
+        <td class="px-6 py-4">
+          <%= incident.description %>
+        </td>
+        <td class="px-6 py-4">
+          <%= incident.severity %>
+        </td>
+        <td class="px-6 py-4">
+          <%= incident.creator %>
+        </td>
+        <td class="px-6 py-4">
+          <%= incident.resolved_at.present? ? "#{((incident.resolved_at - incident.created_at).to_f/3600).round(2)} hours": "WIP" %>
+        </td>
+        <td class="px-6 py-4">
+          <%= incident.channel_id %>
+        </td>
+        <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
+          <div class="inline px-3 py-1 text-sm font-normal rounded-full gap-x-2 <%= incident.status.eql?("open") ? "text-gray-500 bg-gray-100 dark:text-gray-400" : "text-emerald-500 bg-emerald-100/60 dark:bg-gray-800"%>">
+            <%= incident.status %>
+          </div>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
