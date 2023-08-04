@@ -7,7 +7,7 @@ class CreateIncidents < ActiveRecord::Migration[7.0]
       t.integer :status
       t.timestamp :resolved_at
       t.string :creator, null: false
-      t.string :channel_id, null: false
+      t.string :channel_id
 
       t.timestamps
     end

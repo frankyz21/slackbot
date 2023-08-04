@@ -1,30 +1,26 @@
 class MySlackBot < SlackRubyBot::Bot
 
-  Slack::Web::Client.configure do |config|
-    config.token = ENV["SLACK_BOT_TOKEN"]
-  end
-
   match(/^(?<bot>\S*)[\s]*(declare)\s(?<title>.+)$/i) do |client, data, match|
-    title = match['title']
-    client.chat_postMessage(channel: data.channel, text: "Creating a new incident: '#{title}'")
+    # title = match['title']
+    # client.chat_postMessage(channel: data.channel, text: "Creating a new incident: '#{title}'")
 
-    # Open the modal for incident creation
-    open_incident_modal(client, data.user)
+    # # Open the modal for incident creation
+    # open_incident_modal(client, data.user)
   end
 
   command 'resolve' do |client, data, _match|
     # Check if the command is executed in a dedicated incident Slack channel
-    channel_id = data.channel
-    incident = Incident.find_by(channel_id: channel_id)
-    if incident
-      incident.update(status: 'Resolved')
-      # Calculate the time taken to resolve the incident and display it in the channel
-      # You can use the `created_at` and `updated_at` fields of the incident to calculate the time
-      time_to_resolve = incident.updated_at - incident.created_at
-      client.say(channel: data.channel, text: "Incident '#{incident.title}' resolved. Time to resolution: #{time_to_resolve} seconds.")
-    else
-      client.say(channel: data.channel, text: 'This command is only available in dedicated incident channels.')
-    end
+    # channel_id = data.channel
+    # incident = Incident.find_by(channel_id: channel_id)
+    # if incident
+    #   incident.update(status: 'Resolved')
+    #   # Calculate the time taken to resolve the incident and display it in the channel
+    #   # You can use the `created_at` and `updated_at` fields of the incident to calculate the time
+    #   time_to_resolve = incident.updated_at - incident.created_at
+    #   client.say(channel: data.channel, text: "Incident '#{incident.title}' resolved. Time to resolution: #{time_to_resolve} seconds.")
+    # else
+    #   client.say(channel: data.channel, text: 'This command is only available in dedicated incident channels.')
+    # end
   end
 
   def open_incident_modal(client, user)
@@ -50,7 +46,8 @@ class MySlackBot < SlackRubyBot::Bot
           block_id: 'title_input',
           element: {
             type: 'plain_text_input',
-            action_id: 'title_input'
+            action_id: 'title_input',
+            initial_value: params["text"]
           },
           label: {
             type: 'plain_text',

@@ -46,11 +46,8 @@ gem "bootsnap", require: false
 
 # Use Sass to process CSS
 # gem "sassc-rails"
-gem 'slack-ruby-bot'
 gem 'slack-ruby-client'
-gem 'slack-notifier'
 gem 'async-websocket', '~> 0.8.0'
-
 gem 'dotenv-rails', '~> 2.8', '>= 2.8.1'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
