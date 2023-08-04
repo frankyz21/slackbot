@@ -3,7 +3,7 @@ class SlackCommandsController < ApplicationController
 
   def receive    
     case params["text"]
-    when /^resolve(.+)/
+    when /\Aresolve/
       SlackResponder.new(params).resolve_incident
     when /^declare (.+)/
       SlackResponder.new(params).open_incident_modal
