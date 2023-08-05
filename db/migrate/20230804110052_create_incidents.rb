@@ -3,7 +3,7 @@ class CreateIncidents < ActiveRecord::Migration[7.0]
     create_table :incidents do |t|
       t.string :title, null: false
       t.text :description
-      t.integer :severity, null: false
+      t.integer :severity
       t.integer :status
       t.timestamp :resolved_at
       t.string :creator, null: false

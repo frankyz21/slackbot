@@ -1,9 +1,21 @@
 class SlackResponder
   def initialize(params)    
     @params = params
+    @command = params["text"]
     @channel_id = params["channel_id"]
     @client = CLIENT
     @trigger_id = params["trigger_id"]
+  end
+
+  def process
+    case @command
+    when /\Aresolve/
+      resolve_incident
+    when /^declare (.+)/
+      open_incident_modal
+    else
+      command_not_recognized
+    end
   end
 
   def open_incident_modal
@@ -29,7 +41,7 @@ class SlackResponder
           element: {
             type: 'plain_text_input',
             action_id: 'title_input',
-            initial_value: @params["text"].sub(/^declare\s+/, '')
+            initial_value: @command.sub(/^declare\s+/, '')
           },
           label: {
             type: 'plain_text',
@@ -39,6 +51,7 @@ class SlackResponder
         {
           type: 'input',
           block_id: 'description_input',
+          optional: true,
           element: {
             type: 'plain_text_input',
             action_id: 'description_input'
@@ -51,13 +64,14 @@ class SlackResponder
         {
           type: 'input',
           block_id: 'severity_input',
+          optional: true,
           element: {
             type: 'static_select',
             action_id: 'severity_input',
             options: [
-              { text: { type: 'plain_text', text: 'Sev0' }, value: 'Sev0' },
-              { text: { type: 'plain_text', text: 'Sev1' }, value: 'Sev1' },
-              { text: { type: 'plain_text', text: 'Sev2' }, value: 'Sev2' }
+              { text: { type: 'plain_text', text: 'Sev0' }, value: 'sev0' },
+              { text: { type: 'plain_text', text: 'Sev1' }, value: 'sev1' },
+              { text: { type: 'plain_text', text: 'Sev2' }, value: 'sev2' }
             ]
           },
           label: {
@@ -75,7 +89,7 @@ class SlackResponder
     incident = Incident.find_by(channel_id: @channel_id)
     if incident
       incident.update(status: 'resolved', resolved_at: DateTime.now)
-      @client.chat_postMessage(channel: @channel_id, text: "Congratulatons! Incident '#{incident.title}' resolved.", as_user: true)
+      @client.chat_postMessage(channel: @channel_id, text: "Congratulatons! Incident '#{incident.title}' is resolved.", as_user: true)
     else
       @client.chat_postMessage(channel: @channel_id, text: 'This command is only available in dedicated incident channels.', as_user: true)
     end

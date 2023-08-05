@@ -14,7 +14,7 @@ class Incident < ApplicationRecord
     payload = JSON.parse(params["payload"])
     title = payload.dig("view", "state","values","title_input","title_input","value")
     description = payload.dig("view", "state","values","description_input","description_input", "value")
-    severity = payload.dig("view", "state","values", "severity_input","severity_input","selected_option","value").downcase
+    severity = payload.dig("view", "state","values", "severity_input","severity_input","selected_option","value")
     creator = payload.dig("user", "name")
 
     incident = Incident.create!(title: title, description: description, severity: severity, creator: creator, status: "open")
